@@ -21,4 +21,11 @@ This repository aims to assist restaurant owners and managers in enhancing opera
 
 
 ## Screen Shorts
-[![Login](https://github.com/AkberAhmedAnsari/RMS/blob/master/RMS_Picture/Picture_1.PNG "Login")](https://github.com/AkberAhmedAnsari/RMS/blob/master/RMS_Picture/Picture_1.PNG "Login")[![Main](RMS_Picture/Picture_2.PNG "Main")](RMS_Picture/Picture_2.PNG "Main")
+[![Login](https://github.com/AkberAhmedAnsari/RMS/blob/master/RMS_Picture/Picture_1.PNG "Login")](https://github.com/AkberAhmedAnsari/RMS/blob/master/RMS_Picture/Picture_1.PNG "Login")
+
+[![Main](RMS_Picture/Picture_2.PNG "Main")](RMS_Picture/Picture_2.PNG "Main")
+
+[![Point Of Sale (Touch Screen)](RMS_Picture/Picture_3.PNG "Point Of Sale (Touch Screen)")](RMS_Picture/Picture_3.PNG "Point Of Sale (Touch Screen)")
+
+[![Sales Report](RMS_Picture/Picture_7.PNG "Sales Report")](RMS_Picture/Picture_7.PNG "Sales Report")
+
