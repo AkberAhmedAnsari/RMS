@@ -1,0 +1,303 @@
+﻿<UserControl x:Class="BakeryManagementSystem.UserControlWindow.ucPointOfSale"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BakeryManagementSystem.UserControlWindow"
+             xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"    
+             mc:Ignorable="d" Loaded="UserControl_Loaded" Background="White"
+             KeyDown="UserControl_KeyDown" PreviewKeyDown="UserControl_PreviewKeyDown"
+            >
+    <UserControl.Resources>
+        <sys:String x:Key="CommaFormat">{0:#,#.###}</sys:String>
+        <DataTemplate x:Key="dataTemplate">
+            <telerik:RadButton Name="btnCategory" Foreground="#FFE2AB30" Background="#FFEAEAEA" Content="{Binding CategoryName}" VerticalAlignment="Center" HorizontalAlignment="Center" Width="87" Height="62" Margin="3 0 0 0" Click="btnCategory_Click">
+
+            </telerik:RadButton>
+        </DataTemplate>
+        <DataTemplate x:Key="ProductItemDataTemplate">
+            <telerik:RadButton Name="btnProductItem"  Foreground="#FFE2AB30" Background="#FFEAEAEA" Click="btnProductItem_Click">
+                <telerik:RadButton.Content>
+                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="{Binding RecordImage}" Stretch="Fill"  />
+                        <Ellipse Grid.Row="0" Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Fill="#FFA9A8CF"/>
+                        <TextBlock Grid.Row="0" Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" 
+                               Text="{Binding saleprice,StringFormat={StaticResource CommaFormat}}" TextAlignment="Center" FontSize="14" Foreground="White" Margin="0 12 0 0"/>
+                        <TextBlock Grid.Row="0" Height="40" Width="40" HorizontalAlignment="Left" VerticalAlignment="Top" Background="Transparent" 
+                               Text="Rs." TextAlignment="Center" FontSize="10" Foreground="White" Margin="0 3 0 0"/>
+                        <Label Grid.Row="1"  Content="{Binding productItemname}" Foreground="#FFE2AB30" Background="#FFEAEAEA"
+                                   HorizontalAlignment="Stretch" VerticalAlignment="Stretch" FontSize="15" Height="30"/>
+                    </Grid>
+                </telerik:RadButton.Content>
+            </telerik:RadButton>
+        </DataTemplate>
+        <DataTemplate x:Key="MyCustomRowTemplate">
+            <Border x:Name="rowsContainer"
+						BorderThickness="0,0,0,1" Height="50">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding ProductItemName}" Foreground="#FF214D77"  Grid.Row="0" FontSize="16"/>
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5 0 0 0">
+                        <TextBlock Text="Price: " FontSize="14"/>
+                        <TextBlock Text="{Binding  Price,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={StaticResource CommaFormat}}" FontSize="14" Foreground="#FFE2AB30"/>
+                        <TextBlock Text=" Qty: " FontSize="14" />
+                        <TextBlock Text="{Binding Quantity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={StaticResource CommaFormat}}" FontSize="14" Foreground="#FFE2AB30"/>
+                        <TextBlock Text=" Disc.: " FontSize="14" Visibility="{Binding Visibility, ElementName=TextBlockdiscount}"/>
+                        <TextBlock Name="TextBlockdiscount" Text="{Binding DiscountAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, StringFormat={StaticResource CommaFormat}}" FontSize="14"  Foreground="#FFE2AB30">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
+                    <TextBlock Text="{Binding NetAmount, StringFormat={StaticResource CommaFormat}}" VerticalAlignment="Center" Margin="0 0 25 0"
+                               Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" TextAlignment="Right" FontSize="20" Foreground="#FFE2AB30"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <Style x:Key="myListboxStyle">
+            <Style.Resources>
+                <!-- Background of selected item when focussed -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red" />
+                <!-- Background of selected item when not focussed -->
+                <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Green" />
+
+            </Style.Resources>
+        </Style>
+    </UserControl.Resources>
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Name="GridProductMaster" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Collapsed">
+            <Border  BorderBrush="LightGray" 
+                 BorderThickness="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <StackPanel Background="#FF25A0DA">
+                    
+
+                    
+                    <telerik:GroupBox Name="grpOrderInformation" Grid.Row="0" Header="Order Information"  Foreground="White" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="_Order Delivery Date: " Foreground="White" Target="{Binding dtpOrderDelivery}"/>
+                            <telerik:RadDateTimePicker x:Name="dtpOrderDelivery" SelectedDate="{Binding DeliveryDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="130"/>
+                            <Label Content="_E" Target="{Binding }" Height="27" VerticalAlignment="Top" Visibility="Collapsed"/>
+                            <telerik:RadWatermarkTextBox Grid.Row="0" Name="rwtOrderNumber" Margin="10 0 0 0" Width="200" WatermarkContent="Enter Order Number" PreviewKeyDown="rwtOrderNumber_PreviewKeyDown"/>
+                        </StackPanel>
+                    </telerik:GroupBox>
+                    
+                    
+                    
+                </StackPanel>
+            </Border>
+        </Grid>
+
+        <Grid Name="GridCategory" Grid.Row="1" Grid.Column="0"  >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <telerik:RadButton  Grid.Row="0" Content="Category" Height="30" Foreground="#FF214D77"  Background="#FFE0E0E0"  Margin="0 5 0 0"/>
+            <ListBox Name="ListProductCategory" BorderBrush="Transparent" BorderThickness="0" Background="#FFF7F7F7"   ItemsSource="{Binding CategoryList}" Style="{StaticResource myListboxStyle}" ItemTemplate="{StaticResource dataTemplate}"
+                  Grid.Row="1"  >
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="70" />
+                        <Setter Property="Width" Value="100" />
+                        <Setter Property="Background" Value="#FFF7F7F7"/>
+                        <Style.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}"
+                                     Color="Yellow" />
+                        </Style.Resources>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <telerik:VirtualizingWrapPanel Background="#FFF7F7F7"   Width="100" ItemHeight="70" HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            
+        </Grid>
+
+        <Grid Name="GridProductItem" Grid.Row="1" Grid.Column="1" Margin="5 0 0 0" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <telerik:RadButton Grid.Row="0" Content="Product Item" Height="30" Background="#FFE0E0E0" Foreground="#FF214D77" Margin="0 5 0 0"/>
+            <ListBox Name="ListProductItem" BorderBrush="Transparent" BorderThickness="0" Style="{StaticResource myListboxStyle}" ItemTemplate="{StaticResource ProductItemDataTemplate}"
+                  Grid.Row="1"  Background="#FFF7F7F7">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Height" Value="120" />
+                        <Setter Property="Width" Value="150" />
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <telerik:VirtualizingWrapPanel  ItemWidth="150" ItemHeight="120" Background="#FFF7F7F7" Width="{Binding GridProductItem, ElementName=ListProductItem}"  HorizontalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+            
+        </Grid>
+
+        <Grid Name="GridSaleItem" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" Width="350" Margin="5 5 0 0" Background="#FFF7F7F7">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <telerik:RadButton Grid.Row="0" Content="Slip" Height="30" Background="#FFE0E0E0" Foreground="#FF214D77" />
+            <!--<telerik:RadWatermarkTextBox Grid.Row="0" Name="rwtClient" WatermarkContent="Enter Order Number"/>-->
+            <StackPanel Grid.Row="1" Orientation="Horizontal"  Margin="5 3 0 3">
+                <Label Content="_Invoice Date: " ToolTip="ALt + I" Foreground="White" Target="{Binding dtpInvoiceDate}" Visibility="Collapsed"/>
+                <telerik:RadDateTimePicker Name="dtpInvoiceDate" DateTimeWatermarkContent="Enter Invoice Date" SelectedDate="{Binding InvoiceDate,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Width="140"/>
+                <StackPanel Name="stpInvoiceType" Grid.Row="0" Margin="5 0 0 0" Orientation="Horizontal"  >
+                    <RadioButton Name="rdbSale" IsChecked="{Binding IsSale,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="White" Content="_Sale" Visibility="Collapsed"/>
+                    <RadioButton Name="rdbOrder" IsChecked="{Binding IsOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="White" Content="_Order"  Visibility="Collapsed"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal"  HorizontalAlignment="Right"   Margin="0 3 5 3">
+                
+                <telerik:RadButton Name="btnNew" Margin="0 0 5 0" ToolTip="Alt + N, F2"  Width="80" Click="btnNew_Click" HorizontalAlignment="Left">
+                    <telerik:RadButton.Content>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                            <Image Source="/RMS;component/Icons/cancel.png" Margin="0 0 3 0"/>
+                            <Label Content="_New" Margin="5 0 3 0" Padding="0" Target="{Binding btnNew}"/>
+                        </StackPanel>
+                    </telerik:RadButton.Content>
+                </telerik:RadButton>
+                <telerik:RadButton Padding="5"  Name="btnDelete" ToolTip="Alt + D, F3" HorizontalAlignment="Left" Width="80"  Click="btnDelete_Click">
+                    <telerik:RadButton.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="/RMS;component/Icons/garbage.png" Margin="0 0 3 0"/>
+                            <Label Content="_Delete" Margin="0 0 3 0" Padding="0" VerticalAlignment="Center" Target="{Binding btnDelete}"/>
+                        </StackPanel>
+                    </telerik:RadButton.Content>
+                </telerik:RadButton>
+            </StackPanel>
+            <StackPanel Grid.Row="2"  Margin="5 3 5 3" >
+                <Label Content="_C" Visibility="Collapsed"/>
+                <telerik:RadButton Name="rbClientName" Foreground="#FFE2AB30" Background="#FFEAEAEA" ToolTip="Key F7" Height="40" Content="_Client Name" Click="rbClientName_Click"  Margin="0 0 0 3"/>
+                <Label Name="rbAddress"   Height="30" VerticalContentAlignment="Center" FontSize="15"  BorderBrush="LightGray" BorderThickness="1" />
+            </StackPanel>
+            
+            <Label Content="_B" Target="{Binding rwtBarcode}" Visibility="Collapsed"/>
+            <telerik:RadWatermarkTextBox Grid.Row="3"  Name="rwtBarcode" Margin="5 0 5 0" Height="30" WatermarkContent="Enter Barcode" PreviewKeyDown="rwtBarcode_PreviewKeyDown"/>
+            <telerik:RadGridView Name="GridViewProduct" Grid.Row="4" Margin="5 2 5 0"
+                                 GridLinesVisibility="None" 
+							     AutoGenerateColumns="False" CanUserDeleteRows="False" 
+                                 CanUserFreezeColumns="False" CanUserInsertRows="False" 
+                                 CanUserResizeColumns="False" CanUserSortGroups="False" 
+                                 IsFilteringAllowed="False" ShowColumnHeaders="False" 
+                                 ShowGroupPanel="False" RowIndicatorVisibility="Collapsed"
+                                 AlternationCount="2" >
+                <telerik:RadGridView.Columns>
+                    <telerik:GridViewColumn CellTemplate="{StaticResource MyCustomRowTemplate}"  Width="338">
+
+                    </telerik:GridViewColumn>
+                </telerik:RadGridView.Columns>
+            </telerik:RadGridView>
+
+            <Grid  Grid.Row="5" Name="GridForter" Margin="5 0 5 0" >
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border  Grid.Row="0" Grid.Column="0" BorderBrush="LightGray" BorderThickness=".6">
+                    <TextBlock Text="Total Items" Grid.Row="0" Grid.Column="0" TextAlignment="Right" Foreground="#FF214D77" VerticalAlignment="Center" FontSize="15"  Margin="0 0 5 0"/>
+                </Border>
+                <Border  Grid.Row="0" Grid.Column="1" BorderBrush="LightGray" BorderThickness=".6">
+                    <TextBlock Text="Discount"  TextAlignment="Right" VerticalAlignment="Center" Foreground="#FF214D77" FontSize="15"  Margin="0 0 5 0"/>
+                </Border>
+                <Border  Grid.Row="1" Grid.Column="0" BorderBrush="LightGray" BorderThickness=".6 0 .6 .6">
+                    <TextBlock Name="lblItemCount" Text="{Binding ItemCount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                           Grid.Row="1" Grid.Column="0" TextAlignment="Right" VerticalAlignment="Center" Foreground="#FFE2AB30" FontSize="15"  Margin="0 0 5 0"/>
+                </Border>
+                <Border  Grid.Row="1" Grid.Column="1" BorderBrush="LightGray" BorderThickness=".6 0 .6 .6">
+                    <TextBlock Name="lblDiscount" Text="{Binding TotalItemDiscount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={StaticResource CommaFormat}}" 
+                           TextAlignment="Right" VerticalAlignment="Center" Foreground="#FFE2AB30" FontSize="15"  Margin="0 0 5 0"/>
+                </Border>
+                <Border  Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BorderBrush="LightGray" BorderThickness=".6" >
+                    <TextBlock Name="lblNetAmount" Text="{Binding NetAmount,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,StringFormat={StaticResource CommaFormat}}"
+                            FontSize="30" TextAlignment="Right" VerticalAlignment="Center" HorizontalAlignment="Right" Foreground="#FFE2AB30" MinWidth="100" Margin="0 0 5 0"/>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="6" Height="150" Margin="5 5 5 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Label Name="lblValue"  Height="25" FontWeight="Bold" Grid.Column="0" Grid.Row="0" Foreground="#FFE2AB30" Grid.ColumnSpan="6" BorderBrush="LightGray" BorderThickness="1"/>
+                <Button Name="btn1" Content="1" Grid.Column="0" Grid.Row="1"  Click="btnValue_Click"/>
+                <Button Name="btn2" Content="2" Grid.Column="1" Grid.Row="1"  Click="btnValue_Click"/>
+                <Button Name="btn3" Content="3" Grid.Column="2" Grid.Row="1"  Click="btnValue_Click"/>
+                <Button Name="btn4" Content="4" Grid.Column="3" Grid.Row="1"  Click="btnValue_Click"/>
+                <Button Name="btn5" Content="5" Grid.Column="0" Grid.Row="2"  Click="btnValue_Click"/>
+                <Button Name="btn6" Content="6" Grid.Column="1" Grid.Row="2"  Click="btnValue_Click"/>
+                <Button Name="btn7" Content="7" Grid.Column="2" Grid.Row="2"  Click="btnValue_Click"/>
+                <Button Name="btn8" Content="8" Grid.Column="3" Grid.Row="2"  Click="btnValue_Click"/>
+                <Button Name="btn9" Content="9" Grid.Column="0" Grid.Row="3"  Click="btnValue_Click"/>
+                <Button Name="btn0" Content="0" Grid.Column="1" Grid.Row="3"  Click="btnValue_Click"/>
+                <Button Name="btncomma" Content="." Grid.Column="2" Grid.Row="3"  Click="btnValue_Click"/>
+                <Button Name="btnAdd" Content="+/-" Grid.Column="3" Grid.Row="3" Click="btnAdd_Click"/>
+                <Button Name="btnBackqty" Content="_Qty" ToolTip="ALT + Q / F2" Grid.Column="0" Grid.Row="4" Click="btnBackqty_Click"/>
+                <Button Name="btnBackprice" Content="P_rice" ToolTip="ALT + R / F3" Grid.Column="1" Grid.Row="4" Click="btnBackprice_Click"/>
+                <Button Name="btnBackdiscper" Content="Di_sc.(%)" ToolTip="ALT + I / F4" Grid.Column="2" Grid.Row="4" Click="btnBackdiscper_Click"/>
+                <Button Name="btnBackdisc" Content="Dis_c." ToolTip="ALT + S / F6" Grid.Column="3" Grid.Row="4" Click="btnBackdisc_Click"/>
+                <Button Name="btnBackSpace" Content="_Remove" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="1" Click="btnBackSpace_Click"/>
+                <Button Name="btnBackPayment" Foreground="#FFE2AB30" ToolTip="Alt + P / F5" Content="_Payment" Grid.Column="4" Grid.ColumnSpan="2" Grid.Row="2" Grid.RowSpan="3" Click="btnBackPayment_Click"/>
+
+            </Grid>
+        </Grid>
+
+    </Grid>
+</UserControl>

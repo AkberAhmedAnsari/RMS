@@ -1,0 +1,119 @@
+﻿<Window x:Class="BakeryManagementSystem.WinLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:WpfTest="clr-namespace:BakeryManagementSystem" 
+        xmlns:local="clr-namespace:BakeryManagementSystem"
+        mc:Ignorable="d" WindowStartupLocation="CenterScreen"
+        Title="Login" Loaded="Window_Loaded" WindowStyle="SingleBorderWindow" 
+        WindowState="Maximized"
+        >
+    <Window.Background>
+        <ImageBrush ImageSource="/RMS;component/Icons/LoginBackGround.jpg"/>
+    </Window.Background>
+    <Window.Resources>
+        <Style x:Key="{x:Type PasswordBox}" 
+        TargetType="{x:Type PasswordBox}">
+            <Setter Property="WpfTest:PasswordBoxMonitor.IsMonitoring" 
+              Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type PasswordBox}">
+                        <Border Name="Bd" 
+                    Background="{TemplateBinding Background}" 
+                    BorderThickness="{TemplateBinding BorderThickness}" 
+                    BorderBrush="{TemplateBinding BorderBrush}" 
+                    SnapsToDevicePixels="true">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" 
+                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                <TextBlock Text="Password"  
+                           Margin="4, 2, 0, 0" 
+                           Foreground="#FFE2AB30" 
+                           Visibility="Collapsed" 
+                           Name="txtPrompt" />
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" 
+                                                                         Value="false">
+                                <Setter TargetName="Bd" 
+                                                                                Property="Background" 
+                                                                                Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"/>
+                                <Setter Property="Foreground" 
+                                                                                Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="WpfTest:PasswordBoxMonitor.PasswordLength" Value="0">
+                                <Setter Property="Visibility" TargetName="txtPrompt" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <DockPanel Grid.Column="2" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3"  >
+            <DockPanel.Background>
+                <SolidColorBrush Color="#131315" Opacity=".8" />
+            </DockPanel.Background>
+            <Grid Margin="0 0 5 0"   VerticalAlignment="Center" HorizontalAlignment="Stretch">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <Image Source="/RMS;component/Icons/Logo1.png" Height="160"/>
+                    <!--<Label  Content="Bakery Management System" Margin="0 0 0 10" FontSize="20"/>-->
+                </StackPanel>
+
+                <telerik:RadWatermarkTextBox Grid.Row="1" Padding="3" Foreground="#FFE2AB30" FontSize="16" Name="txtlogin" WatermarkContent="Login Id" Width="250" Margin="0 0 0 10"/>
+                <PasswordBox Grid.Row="2" FontSize="16" Padding="2" Foreground="#FFE2AB30"  Name="txtpassword" Width="250"/>
+
+                <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 15 0 5" >
+                    <telerik:RadButton Name="btnLogin" Margin="0 0 0 0" Padding="10" Click="btnLogin_Click">
+                        <telerik:RadButton.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/RMS;component/Icons/login.png" Margin="0 0 3 0"/>
+                                <TextBlock Text="Login" Margin="0 0 3 0" Foreground="#FFE2AB30" />
+                            </StackPanel>
+                        </telerik:RadButton.Content>
+                    </telerik:RadButton>
+                    <telerik:RadButton Name="btnClose" Margin="5 0 0 0" Padding="10" Click="btnClose_Click">
+                        <telerik:RadButton.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="/RMS;component/Icons/cancel.png" Margin="0 0 3 0"/>
+                                <TextBlock Text="Close" Margin="0 0 3 0" Foreground="#FFE2AB30" />
+                            </StackPanel>
+                        </telerik:RadButton.Content>
+                    </telerik:RadButton>
+                </StackPanel>
+            </Grid>
+
+        </DockPanel>
+        
+    </Grid>
+    
+</Window>
